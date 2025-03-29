@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+  <Profiles />
+  <Settings>
+    <Setting Name="ScoreToWin" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="BallSpeedOnServe" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="ControlSensitivity" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Normal</Value>
+    </Setting>
+    <Setting Name="WhoStarts" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Scorer</Value>
+    </Setting>
+    <Setting Name="SingleplayerControl" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Keyboard</Value>
+    </Setting>
+    <Setting Name="BotDifficulty" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Medium</Value>
+    </Setting>
+    <Setting Name="BallSpeedIncreaseRate" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="GameMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Singleplayer</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
