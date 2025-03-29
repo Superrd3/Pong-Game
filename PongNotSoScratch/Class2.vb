@@ -591,11 +591,11 @@
                     player1Bat.Top += playerSpeed / 2
                 End If
             ' Uncomment to let the bot control player2Bat as well
-            'If ballControl.Top < player2Bat.Top Then
-            '    player2Bat.Top -= playerSpeed / 2
-            'ElseIf ballControl.Bottom > player2Bat.Bottom Then
-            '    player2Bat.Top += playerSpeed / 2
-            'End If
+            If ballControl.Top < player2Bat.Top Then
+                player2Bat.Top -= playerSpeed / 2
+            ElseIf ballControl.Bottom > player2Bat.Bottom Then
+                player2Bat.Top += playerSpeed / 2
+            End If
             Case "Mittel"
                 ' Bot bewegt sich mit mittlerer Geschwindigkeit und trifft den Ball häufiger
                 If ballControl.Top < player1Bat.Top Then
@@ -604,11 +604,11 @@
                     player1Bat.Top += playerSpeed
                 End If
             ' Uncomment to let the bot control player2Bat as well
-            'If ballControl.Top < player2Bat.Top Then
-            '    player2Bat.Top -= playerSpeed
-            'ElseIf ballControl.Bottom > player2Bat.Bottom Then
-            '    player2Bat.Top += playerSpeed
-            'End If
+            If ballControl.Top < player2Bat.Top Then
+                player2Bat.Top -= playerSpeed
+            ElseIf ballControl.Bottom > player2Bat.Bottom Then
+                player2Bat.Top += playerSpeed
+            End If
             Case "Hart"
                 ' Bot bewegt sich schnell und trifft den Ball fast immer
                 If ballControl.Top < player1Bat.Top Then
@@ -617,16 +617,16 @@
                     player1Bat.Top += playerSpeed * 1.5
                 End If
             ' Uncomment to let the bot control player2Bat as well
-            'If ballControl.Top < player2Bat.Top Then
-            '    player2Bat.Top -= playerSpeed * 1.5
-            'ElseIf ballControl.Bottom > player2Bat.Bottom Then
-            '    player2Bat.Top += playerSpeed * 1.5
-            'End If
+            If ballControl.Top < player2Bat.Top Then
+                player2Bat.Top -= playerSpeed * 1.5
+            ElseIf ballControl.Bottom > player2Bat.Bottom Then
+                player2Bat.Top += playerSpeed * 1.5
+            End If
             Case "Unmöglich"
                 ' Bot trifft den Ball (fast) immer
                 player1Bat.Top = ballControl.Top - (player1Bat.Height / 2) + (ballControl.Height / 2)
-                ' Uncomment to let the bot control player2Bat as well
-                'player2Bat.Top = ballControl.Top - (player2Bat.Height / 2) + (ballControl.Height / 2)
+                 'Uncomment to let the bot control player2Bat as well
+                player2Bat.Top = ballControl.Top - (player2Bat.Height / 2) + (ballControl.Height / 2)
         End Select
     End Sub
 
