@@ -1,4 +1,4 @@
-﻿Public Class frmPong
+Public Class frmPong
     Inherits System.Windows.Forms.Form
 
     ' UI-Elemente für das Spiel
@@ -251,11 +251,11 @@
         ' Steuerungssensitivität setzen
         Select Case SettingsManager.ControlSensitivity
             Case "Niedrig"
-            ' Paddle-Bewegung verlangsamen
+                playerSpeed = 6
             Case "Normal"
-            ' Standard-Geschwindigkeit
+                playerSpeed = 10
             Case "Hoch"
-                ' Paddle-Bewegung beschleunigen
+                playerSpeed = 14
         End Select
 
         ' Punktelimit setzen
@@ -444,40 +444,32 @@
     Private Sub frmPong_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         Debug.WriteLine("KeyDown-Ereignis ausgelöst: " & e.KeyCode.ToString())
 
-        Dim sensitivity As Integer
-        Select Case SettingsManager.ControlSensitivity
-            Case "Niedrig"
-                sensitivity = 6
-            Case "Normal"
-                sensitivity = 10
-            Case "Hoch"
-                sensitivity = 14
-        End Select
-
         If SettingsManager.GameMode = "Singleplayer" Then
             ' Singleplayer-Steuerung
             If SettingsManager.SingleplayerControl = "Tastatur" Then
                 Select Case e.KeyCode
                     Case Keys.Up
-                        player2Bat.Top = Math.Max(0, player2Bat.Top - sensitivity)
+                        moveUpP2 = True
                     Case Keys.Down
-                        player2Bat.Top = Math.Min(Me.ClientSize.Height - player2Bat.Height, player2Bat.Top + sensitivity)
+                        moveDownP2 = True
                 End Select
             End If
         Else
             ' Multiplayer-Steuerung
             Select Case e.KeyCode
                 Case Keys.W
-                    player1Bat.Top = Math.Max(0, player1Bat.Top - sensitivity)
+                    moveUpP1 = True
                 Case Keys.S
-                    player1Bat.Top = Math.Min(Me.ClientSize.Height - player1Bat.Height, player1Bat.Top + sensitivity)
+                    moveDownP1 = True
                 Case Keys.Up
-                    player2Bat.Top = Math.Max(0, player2Bat.Top - sensitivity)
+                    moveUpP2 = True
                 Case Keys.Down
-                    player2Bat.Top = Math.Min(Me.ClientSize.Height - player2Bat.Height, player2Bat.Top + sensitivity)
+                    moveDownP2 = True
             End Select
         End If
     End Sub
+
+
 
 
 
@@ -490,8 +482,23 @@
 
 
     Private Sub frmPong_KeyUp(sender As Object, e As KeyEventArgs) Handles MyBase.KeyUp
-        If SettingsManager.SingleplayerControl = "Tastatur" Then
+        If SettingsManager.GameMode = "Singleplayer" Then
+            ' Singleplayer-Steuerung
+            If SettingsManager.SingleplayerControl = "Tastatur" Then
+                Select Case e.KeyCode
+                    Case Keys.Up
+                        moveUpP2 = False
+                    Case Keys.Down
+                        moveDownP2 = False
+                End Select
+            End If
+        Else
+            ' Multiplayer-Steuerung
             Select Case e.KeyCode
+                Case Keys.W
+                    moveUpP1 = False
+                Case Keys.S
+                    moveDownP1 = False
                 Case Keys.Up
                     moveUpP2 = False
                 Case Keys.Down
@@ -499,6 +506,8 @@
             End Select
         End If
     End Sub
+
+
 
     ' PreviewKeyDown-Ereignis hinzufügen
     Private Sub frmPong_PreviewKeyDown(sender As Object, e As PreviewKeyDownEventArgs) Handles MyBase.PreviewKeyDown
@@ -577,6 +586,8 @@
         player1Bat.Top = Math.Max(0, Math.Min(Me.ClientSize.Height - player1Bat.Height, player1Bat.Top))
         player2Bat.Top = Math.Max(0, Math.Min(Me.ClientSize.Height - player2Bat.Height, player2Bat.Top))
     End Sub
+
+
 
     ' Dokumentierte If Sätze für Bot-Bewegung. Alle Kommentare die If-Sätze sind, dienen zum Experiment wo der Bot beide Schläger bewegen soll.
 
