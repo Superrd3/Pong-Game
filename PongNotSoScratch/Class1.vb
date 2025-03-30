@@ -1,4 +1,4 @@
-﻿Public Class frmSettings
+Public Class frmSettings
     Inherits System.Windows.Forms.Form
     ' Deklaration der UI-Elemente
     Private lblScoreToWin As Label
@@ -7,6 +7,8 @@
     Private chkBallSpeedOnServe As CheckBox
     Private lblControlSensitivity As Label
     Private cboControlSensitivity As ComboBox
+    Private lblRestartRequired As Label
+    Private lblArrowDown As Label
     Private lblWhoStarts As Label
     Private cboWhoStarts As ComboBox
     Private lblSingleplayerControl As Label
@@ -80,10 +82,31 @@
         lblBallSpeed = New Label() With {.Text = "Langsame Aufschläge?", .Location = New Point(30, 60), .AutoSize = True}
         chkBallSpeedOnServe = New CheckBox() With {.Location = New Point(290, 60)}
 
+
         ' Steuerungssensitivität
-        lblControlSensitivity = New Label() With {.Text = "(Tastatur) Steuerungsempfinglichkeit:", .Location = New Point(30, 100), .AutoSize = True}
+        lblControlSensitivity = New Label() With {.Text = "(Tastatur) Steuerungsempfinglichkeit:", .Location = New Point(30, 100), .AutoSize = True, .BackColor = Color.Transparent}
         cboControlSensitivity = New ComboBox() With {.Location = New Point(250, 100), .Size = New Size(100, 20), .DropDownStyle = ComboBoxStyle.DropDownList}
         cboControlSensitivity.Items.AddRange(New Object() {"Niedrig", "Normal", "Hoch"})
+
+        ' Label für Neustart erforderlich
+        lblRestartRequired = New Label() With {
+            .Text = "Spielneustart benötigt!",
+            .ForeColor = Color.Red,
+            .Location = New Point(45, 115),
+            .AutoSize = True,
+            .BackColor = Color.White,
+            .Font = New Font("Segoe UI", 10, FontStyle.Bold)
+        }
+
+        ' Pfeil nach unten
+        lblArrowDown = New Label() With {
+            .Text = "↪",
+            .ForeColor = Color.Black,
+            .Location = New Point(17, 103),
+            .AutoSize = True,
+            .BackColor = Color.Transparent,
+            .Font = New Font("Segoe UI", 17, FontStyle.Bold)
+        }
 
         ' Wer serviert?
         lblWhoStarts = New Label() With {.Text = "Wer kriegt Aufschlag nach Punkt?", .Location = New Point(30, 140), .AutoSize = True}
@@ -122,7 +145,7 @@
 
         ' Elemente hinzufügen
         Me.Controls.AddRange(New Control() {lblScoreToWin, cboScoreToWin, lblBallSpeed, chkBallSpeedOnServe,
-                                        lblControlSensitivity, cboControlSensitivity, lblWhoStarts, cboWhoStarts,
+                                        lblControlSensitivity, cboControlSensitivity, lblRestartRequired, lblArrowDown, lblWhoStarts, cboWhoStarts,
                                         lblSingleplayerControl, cboSingleplayerControl, lblBotDifficulty, cboBotDifficulty,
                                         lblBallSpeedIncreaseRate, cboBallSpeedIncreaseRate, btnSave, lblGameMode, cboGameMode, btnReset})
         ' TabStop für alle Steuerelemente deaktivieren
