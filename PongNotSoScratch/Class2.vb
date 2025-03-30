@@ -1,4 +1,4 @@
-﻿Public Class frmPong
+Public Class frmPong
     Inherits System.Windows.Forms.Form
 
     ' UI-Elemente für das Spiel
@@ -20,7 +20,6 @@
     ' Punkte
     Private scorePlayer1 As Integer = 0
     Private scorePlayer2 As Integer = 0
-    Private maxScore As Integer = 5 ' Punktelimit (einstellbar)
 
     ' Steuerungsflags
     Private moveUpP1 As Boolean = False
@@ -107,7 +106,7 @@
             .Size = New Size(300, 320),
             .Location = New Point(250, 150),
             .BackColor = Color.Gray,
-            .Visible = False  ' Unsichtbar, bis ESC gedrückt wird
+            .Visible = False 'Unsichtbar bis es aufgerufen wird
         }
 
         ' Titel-Label für das Pausenmenü
@@ -252,11 +251,11 @@
         ' Steuerungssensitivität setzen
         Select Case SettingsManager.ControlSensitivity
             Case "Niedrig"
-            ' Paddle-Bewegung verlangsamen
+                playerSpeed = 6
             Case "Normal"
-            ' Standard-Geschwindigkeit
+                playerSpeed = 10
             Case "Hoch"
-                ' Paddle-Bewegung beschleunigen
+                playerSpeed = 14
         End Select
 
         ' Punktelimit setzen
@@ -424,14 +423,14 @@
 
         If gameOver = True Then Exit Sub
 
-        If scorePlayer1 >= maxScore Then
+        If scorePlayer1 >= SettingsManager.ScoreToWin Then
             gameOver = True
             isPaused = True
             MessageBox.Show("Spieler 1 gewinnt!", "Spiel beendet", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Me.Close()
             Dim mainMenu As New Form1()
             mainMenu.Show()
-        ElseIf scorePlayer2 >= maxScore Then
+        ElseIf scorePlayer2 >= SettingsManager.ScoreToWin Then
             gameOver = True
             isPaused = True
             MessageBox.Show("Spieler 2 gewinnt!", "Spiel beendet", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -445,40 +444,32 @@
     Private Sub frmPong_KeyDown(sender As Object, e As KeyEventArgs) Handles MyBase.KeyDown
         Debug.WriteLine("KeyDown-Ereignis ausgelöst: " & e.KeyCode.ToString())
 
-        Dim sensitivity As Integer
-        Select Case SettingsManager.ControlSensitivity
-            Case "Niedrig"
-                sensitivity = 6
-            Case "Normal"
-                sensitivity = 10
-            Case "Hoch"
-                sensitivity = 14
-        End Select
-
         If SettingsManager.GameMode = "Singleplayer" Then
             ' Singleplayer-Steuerung
             If SettingsManager.SingleplayerControl = "Tastatur" Then
                 Select Case e.KeyCode
                     Case Keys.Up
-                        player2Bat.Top = Math.Max(0, player2Bat.Top - sensitivity)
+                        moveUpP2 = True
                     Case Keys.Down
-                        player2Bat.Top = Math.Min(Me.ClientSize.Height - player2Bat.Height, player2Bat.Top + sensitivity)
+                        moveDownP2 = True
                 End Select
             End If
         Else
             ' Multiplayer-Steuerung
             Select Case e.KeyCode
                 Case Keys.W
-                    player1Bat.Top = Math.Max(0, player1Bat.Top - sensitivity)
+                    moveUpP1 = True
                 Case Keys.S
-                    player1Bat.Top = Math.Min(Me.ClientSize.Height - player1Bat.Height, player1Bat.Top + sensitivity)
+                    moveDownP1 = True
                 Case Keys.Up
-                    player2Bat.Top = Math.Max(0, player2Bat.Top - sensitivity)
+                    moveUpP2 = True
                 Case Keys.Down
-                    player2Bat.Top = Math.Min(Me.ClientSize.Height - player2Bat.Height, player2Bat.Top + sensitivity)
+                    moveDownP2 = True
             End Select
         End If
     End Sub
+
+
 
 
 
@@ -491,8 +482,23 @@
 
 
     Private Sub frmPong_KeyUp(sender As Object, e As KeyEventArgs) Handles MyBase.KeyUp
-        If SettingsManager.SingleplayerControl = "Tastatur" Then
+        If SettingsManager.GameMode = "Singleplayer" Then
+            ' Singleplayer-Steuerung
+            If SettingsManager.SingleplayerControl = "Tastatur" Then
+                Select Case e.KeyCode
+                    Case Keys.Up
+                        moveUpP2 = False
+                    Case Keys.Down
+                        moveDownP2 = False
+                End Select
+            End If
+        Else
+            ' Multiplayer-Steuerung
             Select Case e.KeyCode
+                Case Keys.W
+                    moveUpP1 = False
+                Case Keys.S
+                    moveDownP1 = False
                 Case Keys.Up
                     moveUpP2 = False
                 Case Keys.Down
@@ -500,6 +506,8 @@
             End Select
         End If
     End Sub
+
+
 
     ' PreviewKeyDown-Ereignis hinzufügen
     Private Sub frmPong_PreviewKeyDown(sender As Object, e As PreviewKeyDownEventArgs) Handles MyBase.PreviewKeyDown
@@ -579,6 +587,8 @@
         player2Bat.Top = Math.Max(0, Math.Min(Me.ClientSize.Height - player2Bat.Height, player2Bat.Top))
     End Sub
 
+
+
     ' Dokumentierte If Sätze für Bot-Bewegung. Alle Kommentare die If-Sätze sind, dienen zum Experiment wo der Bot beide Schläger bewegen soll.
 
     Private Sub MoveBot()
@@ -590,12 +600,12 @@
                 ElseIf ballControl.Bottom > player1Bat.Bottom Then
                     player1Bat.Top += playerSpeed / 2
                 End If
-            ' Uncomment to let the bot control player2Bat as well
-            If ballControl.Top < player2Bat.Top Then
-                player2Bat.Top -= playerSpeed / 2
-            ElseIf ballControl.Bottom > player2Bat.Bottom Then
-                player2Bat.Top += playerSpeed / 2
-            End If
+                ' Uncomment to let the bot control player2Bat as well
+            'If ballControl.Top < player2Bat.Top Then
+            '    player2Bat.Top -= playerSpeed / 2
+            'ElseIf ballControl.Bottom > player2Bat.Bottom Then
+            '    player2Bat.Top += playerSpeed / 2
+            'End If
             Case "Mittel"
                 ' Bot bewegt sich mit mittlerer Geschwindigkeit und trifft den Ball häufiger
                 If ballControl.Top < player1Bat.Top Then
@@ -603,12 +613,12 @@
                 ElseIf ballControl.Bottom > player1Bat.Bottom Then
                     player1Bat.Top += playerSpeed
                 End If
-            ' Uncomment to let the bot control player2Bat as well
-            If ballControl.Top < player2Bat.Top Then
-                player2Bat.Top -= playerSpeed
-            ElseIf ballControl.Bottom > player2Bat.Bottom Then
-                player2Bat.Top += playerSpeed
-            End If
+                ' Uncomment to let the bot control player2Bat as well
+                'If ballControl.Top < player2Bat.Top Then
+                '    player2Bat.Top -= playerSpeed
+                'ElseIf ballControl.Bottom > player2Bat.Bottom Then
+                '    player2Bat.Top += playerSpeed
+            'End If
             Case "Hart"
                 ' Bot bewegt sich schnell und trifft den Ball fast immer
                 If ballControl.Top < player1Bat.Top Then
@@ -616,17 +626,17 @@
                 ElseIf ballControl.Bottom > player1Bat.Bottom Then
                     player1Bat.Top += playerSpeed * 1.5
                 End If
-            ' Uncomment to let the bot control player2Bat as well
-            If ballControl.Top < player2Bat.Top Then
-                player2Bat.Top -= playerSpeed * 1.5
-            ElseIf ballControl.Bottom > player2Bat.Bottom Then
-                player2Bat.Top += playerSpeed * 1.5
-            End If
+                ' Uncomment to let the bot control player2Bat as well
+            'If ballControl.Top < player2Bat.Top Then
+            '    player2Bat.Top -= playerSpeed * 1.5
+            'ElseIf ballControl.Bottom > player2Bat.Bottom Then
+            '    player2Bat.Top += playerSpeed * 1.5
+            'End If
             Case "Unmöglich"
                 ' Bot trifft den Ball (fast) immer
                 player1Bat.Top = ballControl.Top - (player1Bat.Height / 2) + (ballControl.Height / 2)
-                 'Uncomment to let the bot control player2Bat as well
-                player2Bat.Top = ballControl.Top - (player2Bat.Height / 2) + (ballControl.Height / 2)
+                ' Uncomment to let the bot control player2Bat as well
+                'player2Bat.Top = ballControl.Top - (player2Bat.Height / 2) + (ballControl.Height / 2)
         End Select
     End Sub
 
