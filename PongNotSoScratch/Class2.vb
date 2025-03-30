@@ -20,7 +20,6 @@
     ' Punkte
     Private scorePlayer1 As Integer = 0
     Private scorePlayer2 As Integer = 0
-    Private maxScore As Integer = 5 ' Punktelimit (einstellbar)
 
     ' Steuerungsflags
     Private moveUpP1 As Boolean = False
@@ -107,7 +106,7 @@
             .Size = New Size(300, 320),
             .Location = New Point(250, 150),
             .BackColor = Color.Gray,
-            .Visible = False  ' Unsichtbar, bis ESC gedrückt wird
+            .Visible = False 'Unsichtbar bis es aufgerufen wird
         }
 
         ' Titel-Label für das Pausenmenü
@@ -424,14 +423,14 @@
 
         If gameOver = True Then Exit Sub
 
-        If scorePlayer1 >= maxScore Then
+        If scorePlayer1 >= SettingsManager.ScoreToWin Then
             gameOver = True
             isPaused = True
             MessageBox.Show("Spieler 1 gewinnt!", "Spiel beendet", MessageBoxButtons.OK, MessageBoxIcon.Information)
             Me.Close()
             Dim mainMenu As New Form1()
             mainMenu.Show()
-        ElseIf scorePlayer2 >= maxScore Then
+        ElseIf scorePlayer2 >= SettingsManager.ScoreToWin Then
             gameOver = True
             isPaused = True
             MessageBox.Show("Spieler 2 gewinnt!", "Spiel beendet", MessageBoxButtons.OK, MessageBoxIcon.Information)
@@ -590,7 +589,7 @@
                 ElseIf ballControl.Bottom > player1Bat.Bottom Then
                     player1Bat.Top += playerSpeed / 2
                 End If
-            ' Uncomment to let the bot control player2Bat as well
+                ' Uncomment to let the bot control player2Bat as well
             'If ballControl.Top < player2Bat.Top Then
             '    player2Bat.Top -= playerSpeed / 2
             'ElseIf ballControl.Bottom > player2Bat.Bottom Then
@@ -603,11 +602,11 @@
                 ElseIf ballControl.Bottom > player1Bat.Bottom Then
                     player1Bat.Top += playerSpeed
                 End If
-            ' Uncomment to let the bot control player2Bat as well
-            'If ballControl.Top < player2Bat.Top Then
-            '    player2Bat.Top -= playerSpeed
-            'ElseIf ballControl.Bottom > player2Bat.Bottom Then
-            '    player2Bat.Top += playerSpeed
+                ' Uncomment to let the bot control player2Bat as well
+                'If ballControl.Top < player2Bat.Top Then
+                '    player2Bat.Top -= playerSpeed
+                'ElseIf ballControl.Bottom > player2Bat.Bottom Then
+                '    player2Bat.Top += playerSpeed
             'End If
             Case "Hart"
                 ' Bot bewegt sich schnell und trifft den Ball fast immer
@@ -616,7 +615,7 @@
                 ElseIf ballControl.Bottom > player1Bat.Bottom Then
                     player1Bat.Top += playerSpeed * 1.5
                 End If
-            ' Uncomment to let the bot control player2Bat as well
+                ' Uncomment to let the bot control player2Bat as well
             'If ballControl.Top < player2Bat.Top Then
             '    player2Bat.Top -= playerSpeed * 1.5
             'ElseIf ballControl.Bottom > player2Bat.Bottom Then
